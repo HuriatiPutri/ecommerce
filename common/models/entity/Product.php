@@ -15,6 +15,7 @@ use common\models\entity\Wishlist;
  * @property integer $price
  * @property string $desc
  * @property string $mainImage
+ * @property int $stock
  * @property integer $category_id
  * @property integer $created_at
  * @property integer $created_by
@@ -52,8 +53,8 @@ class Product extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'price', 'desc', 'category_id'], 'required'],
-            [['price', 'category_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['name', 'price', 'desc','stock','category_id'], 'required'],
+            [['price', 'category_id','stock', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['desc', 'mainImage'], 'string'],
             [['name'], 'string', 'max' => 225],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
@@ -71,6 +72,7 @@ class Product extends \yii\db\ActiveRecord
             'price' => 'Price',
             'desc' => 'Desc',
             'mainImage' => 'Main Image',
+            'stock' => 'Stock',
             'category_id' => 'Category',
             'created_at' => 'Created At',
             'created_by' => 'Created By',

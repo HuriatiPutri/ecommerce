@@ -22,6 +22,7 @@ use Yii;
  * @property integer $berat
  * @property integer $paid
  * @property string $date
+ * @property string $bukti
  * @property integer $status
  * @property integer $created_at
  * @property integer $created_by
@@ -36,20 +37,23 @@ class Pesan extends \yii\db\ActiveRecord
      public $kotaasal, $kotatujuan;
     const CART = 0;
     const CHECKOUT = 1;
-    const BAYAR = 2;
-    const SELESAI = 3;
+    const BB = 2;
+    const BAYAR = 3;
+    const SELESAI = 4;
 
  public static function statusTypes($index = 'all', $html = false)
     {
         $array = [
             self::CART => 'Dalam keranjang',
             self::CHECKOUT => 'Checkout',
+            self::BB => 'Belum Bayar',
             self::BAYAR => 'Bayar',
             self::SELESAI => 'Selesai',
         ];
         if ($html) $array = [
             self::CART => '<span class="text-bold text-default">Dalam keranjang</span>',
             self::CHECKOUT => '<span class="text-bold text-warning">Checkout</span>',
+            self::BB => '<span class="text-bold text-warning">Belum Bayar</span>',
             self::BAYAR => '<span class="text-bold text-info">Bayar</span>',
             self::SELESAI => '<span class="text-bold text-success">Selesai</span>',
         ];
@@ -88,7 +92,7 @@ class Pesan extends \yii\db\ActiveRecord
         return [
             [['user_id', 'paid', 'date'], 'required'],
             [['user_id', 'berat', 'paid', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by', 'total'], 'integer'],
-            [['date','kotaasal','kotatujuan'], 'safe'],
+            [['date','kotaasal','kotatujuan','bukti'], 'safe'],
             [['nama_penerima', 'no_telp', 'provinsi_asal', 'provinsi_tujuan', 'kota_asal', 'kota_tujuan', 'jln', 'kurir', 'kodepos', 'ongkir'], 'string', 'max' => 225],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
@@ -123,6 +127,33 @@ class Pesan extends \yii\db\ActiveRecord
         ];
     }
 
+    public function saveFile($uploadedFile, $file)
+    {
+        $filename  = $this->id . '.' . $uploadedFile->extension;
+        $directory = Yii::getAlias('@uploads/' . $this->tableName() . '/' . $file);
+        if (!file_exists($directory)) mkdir($directory, 0777, true);
+        $uploadedFile->saveAs($directory . '/' . $filename);
+        $this->$file = $filename;
+        $this->save();
+    }
+    public function downloadFile($field)
+    {
+        if ($this->$field) {
+            $filepath  = Yii::getAlias('@uploads/' . $this->tableName() . '/' . $field . '/' . $this->$field);
+            $array     = explode('.', $this->$field);
+            $extension = end($array);
+            $filename  = $this->bukti . '.' . $extension;
+            if (file_exists($filepath)) return Yii::$app->response->sendFile($filepath, $filename, ['inline' => true]);
+        }
+        return false;
+    }
+
+    public static function uploadableFields()
+    {
+        return [
+            'bukti'
+        ];
+    }
     /**
      * @return \yii\db\ActiveQuery
      */

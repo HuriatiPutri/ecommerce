@@ -100,6 +100,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['class' => 'text-right'],
                 'contentOptions' => ['class' => 'text-right'],
             ],
+                    [
+                        'contentOptions' => ['class' => 'action-column nowrap text-left'],
+                        'class' => 'yii\grid\ActionColumn',
+                        'template' =>'{view}',
+                        'buttons' => [
+                            'view' => function ($url,$model) {
+                                return Html::a('Upload Bukti', Url::toRoute(['cart/upload-bukti','id'=>$model->id]), ['class' => 'btn btn-xs btn-default btn-text-info']);
+                            },
+                            
+                        ],
+                    ],
             // 'created_at:integer',
             // 'created_by:integer',
             // 'updated_at:integer',

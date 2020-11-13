@@ -6,18 +6,17 @@ use yii\helpers\ArrayHelper;
 use kartik\grid\GridView;
 use kartik\export\ExportMenu;
 use kartik\widgets\Select2;
-use kartik\widgets\DatePicker;
-use common\models\entity\User;
+use common\models\entity\Category;
 
 /* @var $this yii\web\View */
-/* @var $searchModel common\models\search\PesanSearch */
+/* @var $searchModel common\models\search\ProductSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Pesan';
+$this->title = 'Product';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<div class="pesan-index">
+<div class="product-index">
 
     <?php
     $exportColumns = [
@@ -25,20 +24,41 @@ $this->params['breadcrumbs'][] = $this->title;
             'class' => 'yii\grid\SerialColumn',
         ],
         'id',
-        'user.name:text:User',
-        'paid',
-        'date:date',
-        'status',
-        'created_at:datetime',
-        'createdBy.username:text:Created By',
-        'updated_at:datetime',
-        'updatedBy.username:text:Updated By',
+        'name',
+        [
+            'attribute' => 'price',
+            'format' => 'integer',
+            'headerOptions' => ['class' => 'text-right'],
+            'contentOptions' => ['class' => 'text-right'],
+        ],
+        [
+            'attribute' => 'stock',
+            'format' => 'integer',
+            'contentOptions' => ['class' => 'text-wrap'],
+        ],
+        [
+            'label' => 'Foto',
+            'value' => function ($model) {
+                return $model->mainImage ? Html::img(['download', 'id' => $model->id, 'field' => 'mainImage'], ['class' => '', 'data-pjax' => 0, 'width' => 100]) : null;
+            },
+            'format' => 'raw',
+        ],
+        [
+            'attribute' => 'category_id',
+            'value' => 'category.category',
+            'filterType' => GridView::FILTER_SELECT2,
+            'filter' => ArrayHelper::map(Category::find()->orderBy('category')->asArray()->all(), 'id', 'category'),
+            'filterInputOptions' => ['placeholder' => ''],
+            'filterWidgetOptions' => [
+                'pluginOptions' => ['allowClear' => true],
+            ],
+        ],
     ];
 
     $exportMenu = ExportMenu::widget([
         'dataProvider' => $dataProvider,
         'columns' => $exportColumns,
-        'filename' => 'Pesan',
+        'filename' => 'Product',
         'fontAwesome' => true,
         'dropdownOptions' => [
             'label' => 'Export',
@@ -90,39 +110,27 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
         // 'id',
+        'name',
         [
-            'attribute' => 'nama_penerima',
-            'value' => 'nama_penerima',
-        ],
-        [
-            'attribute' => 'paid',
+            'attribute' => 'price',
             'format' => 'integer',
             'headerOptions' => ['class' => 'text-right'],
             'contentOptions' => ['class' => 'text-right'],
         ],
         [
-            'attribute' => 'date',
-            'format' => 'date',
-            'filterType' => GridView::FILTER_DATE,
+            'attribute' => 'stock',
+            'format' => 'integer',
+            'contentOptions' => ['class' => 'text-wrap'],
+        ],
+        [
+            'attribute' => 'category_id',
+            'value' => 'category.category',
+            'filterType' => GridView::FILTER_SELECT2,
+            'filter' => ArrayHelper::map(Category::find()->orderBy('category')->asArray()->all(), 'id', 'category'),
             'filterInputOptions' => ['placeholder' => ''],
             'filterWidgetOptions' => [
-                'pluginOptions' => ['autoclose' => true, 'format' => 'yyyy-mm-dd'],
+                'pluginOptions' => ['allowClear' => true],
             ],
-        ],
-        [
-            'attribute' => 'bukti',
-            'format' => 'raw',
-            'value' => function ($model) {
-                return $model->bukti ? Html::a('Lihat',['download', 'id' => $model->id, 'field' => 'bukti'], ['class' => 'btn btn-info btn-xs']) : null;
-            },
-        ],
-        [
-            'attribute' => 'status',
-            'value' => function ($model) {
-                return $model->getStatusTypeText();
-            },
-            'headerOptions' => ['class' => 'text-right'],
-            'contentOptions' => ['class' => 'text-right'],
         ],
         // 'created_at:integer',
         // 'created_by:integer',
@@ -139,10 +147,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'striped' => false,
         'bordered' => false,
         'toolbar' => [
-            Html::a('<i class="fa fa-plus"></i> ' . 'Create', ['create'], ['class' => 'btn btn-success']),
+            // Html::a('<i class="fa fa-plus"></i> ' . 'Create', ['create'], ['class' => 'btn btn-success']),
             Html::a('<i class="fa fa-repeat"></i> ' . 'Reload', ['index'], ['data-pjax' => 0, 'class' => 'btn btn-default']),
             '{toggleData}',
-            // $exportMenu,
+            $exportMenu,
         ],
         'panel' => [
             'type' => 'no-border transparent',

@@ -55,7 +55,7 @@
                     // 'visible' => Yii::$app->user->can('superuser'),
                     'items' => [
                         ['label' => 'Pesanan',         'url' => ['/pesan/index']],
-                        ['label' => 'Pengiriman',   'url' => ['/pengiriman/index']],
+                        // ['label' => 'Pengiriman',   'url' => ['/pengiriman/index']],
                         ['label' => 'Barang Masuk',         'url' => ['/masuk/index']],
                         // ['label' => 'Costumer',         'url' => ['/karyawan/index']],
                         // ['label' => 'Employee',   'url' => ['/acf/permission']],
@@ -70,9 +70,9 @@
                     'options' => ['class' => 'treeview'],
                     // 'visible' => Yii::$app->user->can('superuser'),
                     'items' => [
-                        ['label' => 'Pesanan',         'url' => ['/pesan/index']],
-                        ['label' => 'Pengiriman',   'url' => ['/pengiriman/index']],
-                        ['label' => 'Stok Barang',   'url' => ['/pengiriman/index']],
+                        ['label' => 'Pesanan',         'url' => ['/pesan/report']],
+                        // ['label' => 'Pengiriman',   'url' => ['/pengiriman/index']],
+                        ['label' => 'Stok Barang',   'url' => ['/product/report']],
                         // ['label' => 'Costumer',         'url' => ['/karyawan/index']],
                         // ['label' => 'Employee',   'url' => ['/acf/permission']],
                         // ['label' => 'Supplier',        'url' => ['/supplier/index']],

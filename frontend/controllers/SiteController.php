@@ -90,7 +90,19 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Product::find(),
+            'query' => Product::find()->andFilterWhere(['>','stock',0]),
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC,
+                ]
+            ],
+            'pagination' => [
+                'forcePageParam' => false,
+                'pageSizeParam' => false,
+            ],
+        ]);
+        $dataProviderHabis = new ActiveDataProvider([
+            'query' => Product::find()->where(['stock'=>0]),
             'sort' => [
                 'defaultOrder' => [
                     'id' => SORT_DESC,
@@ -105,6 +117,7 @@ class SiteController extends Controller
 
         return $this->render('index', [
             'slider' => $slider,
+            'dataProviderHabis' => $dataProviderHabis,
             'dataProvider' => $dataProvider,
         ]);
     }
@@ -128,7 +141,20 @@ class SiteController extends Controller
     public function actionViewByCategory($id)
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Product::find()->where(['category_id' => $id]),
+            'query' => Product::find()->where(['category_id' => $id])->andFilterWhere(['>','stock',0]),
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC,
+                ]
+            ],
+            'pagination' => [
+                'forcePageParam' => false,
+                'pageSizeParam' => false,
+            ],
+        ]);
+
+        $dataProviderHabis = new ActiveDataProvider([
+            'query' => Product::find()->where(['category_id' => $id, 'stock' => 0]),
             'sort' => [
                 'defaultOrder' => [
                     'id' => SORT_DESC,
@@ -145,6 +171,7 @@ class SiteController extends Controller
         return $this->render('index', [
             'slider' => $slider,
             'dataProvider' => $dataProvider,
+            'dataProviderHabis' => $dataProviderHabis,
         ]);
     }
 

@@ -97,8 +97,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' => ['class' => 'text-right'],
             ],
             [
-                'attribute' => 'desc',
-                'format' => 'ntext',
+                'attribute' => 'stock',
+                'format' => 'integer',
                 'contentOptions' => ['class' => 'text-wrap'],
             ],
             [

@@ -8,9 +8,9 @@ use kartik\widgets\Select2;
 use kartik\widgets\DatePicker;
 use common\models\entity\User;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\entity\pesan */
-/* @var $form yii\widgets\ActiveForm */
+    /* @var $this yii\web\View */
+    /* @var $model common\models\entity\pesan */
+    /* @var $form yii\widgets\ActiveForm */
 ?>
 
 <div class="pesan-form">
@@ -36,7 +36,7 @@ use common\models\entity\User;
 
     <?= $form->field($model, 'status')->textInput() ?>
 
-    
+    <?php if($model->stock > 0){?>
     <div class="form-panel">
         <div class="row">
             <div class="col-sm-12">
@@ -44,6 +44,7 @@ use common\models\entity\User;
             </div>
         </div>
     </div>
+    <?php } ?>
 
     <?php ActiveForm::end(); ?>
 

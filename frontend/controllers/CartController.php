@@ -13,7 +13,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\db\IntegrityException;
+use yii\web\UploadedFile;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 
 /**
  * CartController implements the CRUD actions for pesan model.
@@ -164,11 +166,14 @@ class CartController extends Controller
     }
     public function actionUpdateQty($id,$set){
         $detail = DetailPesan::find()->joinWith('product')->where(['detail_pesan.id'=>$id])->one();
+        $product = Product::findOne($detail->product_id);
         if($set == 'kurang'){
             if($detail->qty >1){
             $detail->qty = $detail->qty - 1;
             $detail->pesan_total = $detail->product->price * $detail->qty;
             $detail->save();
+            $product->stock = $product->stock+1;
+            $product->save();
             }else{
                 $detail->delete();
             }
@@ -176,6 +181,9 @@ class CartController extends Controller
              $detail->qty = $detail->qty + 1;
              $detail->pesan_total = $detail->product->price * $detail->qty;
              $detail->save();
+
+            $product->stock = $product->stock - 1;
+            $product->save();
         }
         return $this->redirect(['/cart']);
     }
@@ -203,7 +211,33 @@ class CartController extends Controller
             ]);
         }
     }
+    public function actionUploadBukti($id)
+    {
+        $model = Pesan::findOne($id);
 
+        if ($model->load(Yii::$app->request->post())) {
+            $model->status = 3;
+            foreach ($model->uploadableFields() as $field) {
+                unset($model->$field);
+            }
+
+            if ($model->save()) {
+                foreach ($model->uploadableFields() as $field) {
+                    $uploadedFile = UploadedFile::getInstance($model, $field);
+                    if ($uploadedFile) {
+                        $model->saveFile($uploadedFile, $field);
+                    }
+                }
+
+
+                return $this->redirect(Url::toRoute('/profile'));
+            }
+        } else {
+            return $this->render('_formbukti', [
+                'model' => $model,
+            ]);
+        }
+    }
     /**
      * Deletes an existing pesan model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

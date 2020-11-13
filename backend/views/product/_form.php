@@ -18,18 +18,20 @@ use mdm\widgets\TabularInput;
 
 <div class="product-form">
 
-<div class="row">
-<div class="col-md-8 col-sm-12">
+    <div class="row">
+        <div class="col-md-8 col-sm-12">
 
-    <?php $form = ActiveForm::begin(); ?>
+            <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'price')->textInput() ?>
+            <?= $form->field($model, 'price')->textInput() ?>
+            
+            <?= $form->field($model, 'stock')->textInput() ?>
 
-    <?= $form->field($model, 'desc')->textarea(['rows' => 6]) ?>
+            <?= $form->field($model, 'desc')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'mainImage', ['template' => "{input}\n{error}{hint}"])->widget(FileInput::className(), [
+            <?= $form->field($model, 'mainImage', ['template' => "{input}\n{error}{hint}"])->widget(FileInput::className(), [
                 // 'options' => ['accept' => 'image/*, application/pdf'],
                 'pluginOptions' => [
                     'showPreview'           => false,
@@ -38,13 +40,13 @@ use mdm\widgets\TabularInput;
                     'elErrorContainer'      => '#error-media_file_physical-file',
                 ]
             ]) ?>
-    <?= $form->field($model, 'category_id')->widget(Select2::classname(), [
-        'data' => ArrayHelper::map(Category::find()->all(), 'id', 'category'),
-        'options' => ['placeholder' => ''],
-        'pluginOptions' => ['allowClear' => true],
-    ]); ?>
+            <?= $form->field($model, 'category_id')->widget(Select2::classname(), [
+                'data' => ArrayHelper::map(Category::find()->all(), 'id', 'category'),
+                'options' => ['placeholder' => ''],
+                'pluginOptions' => ['allowClear' => true],
+            ]); ?>
 
-<!-- <div class="panel panel-default">
+            <!-- <div class="panel panel-default">
         <table class="table table-condensed table-hover">
             <thead>
                 <tr>
@@ -52,7 +54,7 @@ use mdm\widgets\TabularInput;
                     <th align="right"><a id="btn-add" class="btn btn-success"><i class="fa fa-plus"></i></a></th>
                 </tr>
             </thead>
-            <?php 
+            <?php
             // TabularInput::widget([
             //     'id'            => 'detail-grid',
             //     'allModels'     => $model->fotoDetails,
@@ -70,17 +72,17 @@ use mdm\widgets\TabularInput;
         </table>
     </div>
      -->
-    <div class="form-panel">
-        <div class="row">
-    	    <div class="col-sm-12">
-    	        <?= Html::submitButton('<i class="glyphicon glyphicon-ok"></i> ' . ($model->isNewRecord ? 'Create' : 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+            <div class="form-panel">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <?= Html::submitButton('<i class="glyphicon glyphicon-ok"></i> ' . ($model->isNewRecord ? 'Create' : 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+                    </div>
+                </div>
             </div>
-	    </div>
+
+            <?php ActiveForm::end(); ?>
+
+        </div>
     </div>
-
-    <?php ActiveForm::end(); ?>
-
-</div>
-</div>
 
 </div>

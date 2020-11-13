@@ -45,6 +45,17 @@ class PesanController extends Controller
         ]);
     }
 
+    public function actionReport()
+    {
+        $searchModel = new PesanSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('report', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
     /**
      * Displays a single pesan model.
      * @param integer $id
@@ -56,7 +67,11 @@ class PesanController extends Controller
             'model' => $this->findModel($id),
         ]);
     }
-
+    public function actionDownload($id, $field)
+    {
+        $model = $this->findModel($id);
+        if (!$model->downloadFile($field)) throw new NotFoundHttpException('The requested file does not exist.');
+    }
     /**
      * Creates a new pesan model.
      * If creation is successful, the browser will be redirected to the 'view' page.

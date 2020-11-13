@@ -25,14 +25,34 @@ $this->params['breadcrumbs'][] = $this->title;
             'class' => 'yii\grid\SerialColumn',
         ],
         'id',
-        'user.name:text:User',
-        'paid',
-        'date:date',
-        'status',
-        'created_at:datetime',
-        'createdBy.username:text:Created By',
-        'updated_at:datetime',
-        'updatedBy.username:text:Updated By',
+        [
+            'attribute' => 'nama_penerima',
+            'value' => 'nama_penerima',
+        ],
+        [
+            'attribute' => 'paid',
+            'format' => 'integer',
+            'headerOptions' => ['class' => 'text-right'],
+            'contentOptions' => ['class' => 'text-right'],
+        ],
+        [
+            'attribute' => 'date',
+            'format' => 'date',
+            'filterType' => GridView::FILTER_DATE,
+            'filterInputOptions' => ['placeholder' => ''],
+            'filterWidgetOptions' => [
+                'pluginOptions' => ['autoclose' => true, 'format' => 'yyyy-mm-dd'],
+            ],
+        ],
+        
+        [
+            'attribute' => 'status',
+            'value' => function ($model) {
+                return $model->getStatusTypeText();
+            },
+            'headerOptions' => ['class' => 'text-right'],
+            'contentOptions' => ['class' => 'text-right'],
+        ],
     ];
 
     $exportMenu = ExportMenu::widget([
@@ -113,7 +133,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'attribute' => 'bukti',
             'format' => 'raw',
             'value' => function ($model) {
-                return $model->bukti ? Html::a('Lihat',['download', 'id' => $model->id, 'field' => 'bukti'], ['class' => 'btn btn-info btn-xs']) : null;
+                return $model->bukti ? Html::a('Lihat',['download', 'id' => $model->id, 'field' => 'bukti'], ['class' => 'btn btn-info btn-xs','target'=>'_blank']) : null;
             },
         ],
         [
@@ -134,15 +154,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'responsiveWrap' => false,
-        'pjax' => true,
+        // 'pjax' => true,
         'hover' => true,
         'striped' => false,
         'bordered' => false,
         'toolbar' => [
-            Html::a('<i class="fa fa-plus"></i> ' . 'Create', ['create'], ['class' => 'btn btn-success']),
+            // Html::a('<i class="fa fa-plus"></i> ' . 'Create', ['create'], ['class' => 'btn btn-success']),
             Html::a('<i class="fa fa-repeat"></i> ' . 'Reload', ['index'], ['data-pjax' => 0, 'class' => 'btn btn-default']),
             '{toggleData}',
-            // $exportMenu,
+            $exportMenu,
         ],
         'panel' => [
             'type' => 'no-border transparent',

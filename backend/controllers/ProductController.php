@@ -50,6 +50,17 @@ class ProductController extends Controller
         ]);
     }
 
+    public function actionReport()
+    {
+        $searchModel = new ProductSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('report', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
     /**
      * Displays a single Product model.
      * @param integer $id

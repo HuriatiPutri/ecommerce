@@ -53,7 +53,7 @@ $this->title = 'Info Pembayaran';
                         <?=$model->no_telp?>
                     </div>
                     <div class="panel-footer">
-                        <b>Isi panel footer</b>
+                        <b></b>
                     </div>
                 </div>
             </div>
